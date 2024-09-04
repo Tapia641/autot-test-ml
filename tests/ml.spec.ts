@@ -1,72 +1,56 @@
-const { test, expect } = require('@playwright/test');
+const { test, expec, chromium } = require('@playwright/test');
 
 test('Search and filter PlayStation 5 on MercadoLibre', async ({ page }) => {
-  // Web site MercadoLibre
-  await page.goto('https://www.mercadolibre.com');
+   // Web site MercadoLibre
+   //   const browser = await chromium.launch({ headless: false });
+   //   const context = await browser.newContext({ incognito: true });
+   //   const page = await context.newPage();
 
-  // Country
-  await page.click('//*[@id="MX"]');
+   await page.goto('https://www.mercadolibre.com');
 
-  // Search "playstation 5"
-  await page.fill('input[name="as_word"]', 'playstation 5');
-  await page.press('input[name="as_word"]', 'Enter');
+   // Country
+   await page.click('//*[@id="MX"]');
 
-  // Wait
-  await page.waitForSelector('.ui-search-results');
+   // Search "playstation 5"
+   await page.fill('input[name="as_word"]', 'playstation 5');
+   await page.press('input[name="as_word"]', 'Enter');
 
-  // Filter by "Nuevos"
-  await page.click("//span[@class='ui-search-filter-name' and text()='Nuevo']"); // Filtra por condición "Nuevo"
-  await page.waitForSelector('.ui-search-results'); // Esperar a que cargue de nuevo
+   // Wait
+   await page.waitForSelector('.ui-search-results');
 
-  // Filter by "Cdmx" -> Distrito Federal
-  await page.click("//span[@class='ui-search-filter-name' and text()='Distrito Federal']"); // Filtra por "CDMX"
-  await page.waitForSelector('.ui-search-results'); // Esperar a que cargue de nuevo
+   // Filter by "Nuevo"
+   await page.click("//span[@class='ui-search-filter-name' and text()='Nuevo']");
+   await page.waitForSelector('.ui-search-results'); 
 
+   // Filter by "Cdmx" -> Distrito Federal
+   await page.click("//span[@class='ui-search-filter-name' and text()='Distrito Federal']");
+   await page.waitForSelector('.ui-search-results'); 
 
-   //---
-    // Abrir el menú de ordenamiento
-    const dropdownButtonSelector = '.ui-search-sort-filter__dropdown .andes-dropdown__trigger';
-    await page.click(dropdownButtonSelector);
+   // Localizar el botón del dropdown
+   await page.waitForSelector('.ui-search-sort-filter');
+   await page.isVisible('.ui-search-view-options__title');
+   const dropdownButtonSelector = '//button[@id=":R2m55e6:-trigger"]';
+   const dropdownButton = await page.locator(dropdownButtonSelector).first();
+   await dropdownButton.click();
 
-    // Seleccionar "Mayor precio"
-    const mayorPrecioOptionSelector = '.andes-list__item-primary:text("Mayor precio")';
-    await page.click(mayorPrecioOptionSelector);
+   const mayorPrecioOption = await page.locator('//*[@id=":R2m55e6:-menu-list-option-price_desc"]/div/div/span').first();
+   await mayorPrecioOption.click();
+   await page.waitForSelector('.ui-search-results');
 
-    // Esperar a que se actualicen los resultados
-    await page.waitForSelector('.andes-list__item', { state: 'attached' });
+   const productElements = await page.$$('.ui-search-result__wrapper');
 
-    // Extraer y mostrar los primeros 5 resultados (ajusta según tus necesidades)
-    const productListSelector = '.andes-list .andes-list__item';
-    const products = await page.$$(productListSelector);
+   for (let i = 0; i < Math.min(5, productElements.length); i++) {
+      const productElement = productElements[i];
 
-    for (let i = 0; i < Math.min(products.length, 5); i++) {
-      const product = products[i];
-      const title = await product.$eval('.andes-list__item-title', (element) => element.textContent);
-      const price = await product.$eval('.andes-list__item-price', (element) => element.textContent);
-      console.log(`Producto ${i + 1}: ${title} - Precio: ${price}`);
-    }
+      // Obtener el título y el precio
+      const title = await productElement.$eval('.ui-search-item__title', (element) => element.textContent.trim());
+      const price = await productElement.$eval('.andes-money-amount__fraction', (element) => element.textContent.trim());
 
+      console.log(`Producto ${i + 1}:`);
+      console.log(`Título: ${title}`);
+      console.log(`Precio: ${price}`);
+   }
 
-   //---
-
-   // // Locate the dropdown element
-   // const dropdown = await page.locator('button:has-text("Más relevantes")').first();
-   // await expect(dropdown).toBeVisible({ timeout: 5000 });
-   
-   // // Click on the dropdown
-   // await dropdown.click();
-   
-   // // Locate the span element
-   // const mayorPrecioOption = await page.locator('span:has-text("Mayor precio")').first();
-   // await expect(mayorPrecioOption).toBeVisible({ timeout: 5000 });
-
-   // // Click on the "Mayor precio"
-   // await mayorPrecioOption.click();
-
-   // // Wait for the page
-   // await page.waitForSelector('.andes-list__item-primary:text("Mayor precio")', { state: 'detached' });
-   
 });
-
 
 // adelina cuarto 3, hielo
