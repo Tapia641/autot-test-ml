@@ -16,35 +16,35 @@ Para ejecutar este proyecto en tu entorno local, asegúrate de tener los siguien
 
 1. Clona este repositorio:
 
-   \`\`\`bash
+   ```bash
    git clone https://github.com/Tapia641/playw-test-ml.git
-   \`\`\`
+   ```
 
 2. Entra en el directorio del proyecto:
 
-   \`\`\`bash
+   ```bash
    cd playw-test-ml
-   \`\`\`
+   ```
 
 3. Instala las dependencias del proyecto:
 
-   \`\`\`bash
+   ```bash
    npm install
-   \`\`\`
+   ```
 
 4. Instala los navegadores necesarios para Playwright:
 
-   \`\`\`bash
+   ```bash
    npx playwright install
-   \`\`\`
+   ```
 
 ## Ejecución de las pruebas en el entorno local
 
 Para ejecutar las pruebas en tu entorno local, usa el siguiente comando:
 
-\`\`\`bash
+```bash
 npx playwright test
-\`\`\`
+```
 
 Esto ejecutará todos los tests en el archivo \`ml.spec.ts\`.
 
@@ -52,17 +52,17 @@ Esto ejecutará todos los tests en el archivo \`ml.spec.ts\`.
 
 Si deseas ejecutar las pruebas con una vista del navegador (modo no headless):
 
-\`\`\`bash
+```bash
 npx playwright test --headed
-\`\`\`
+```
 
 ### Visualización del reporte de pruebas
 
 Para ver los resultados en un formato de informe interactivo:
 
-\`\`\`bash
+```bash
 npx playwright show-report
-\`\`\`
+```
 
 ## Configuración de GitHub Actions
 
@@ -87,7 +87,6 @@ El archivo \`playwright.yml\` en \`.github/workflows\` se parece a esto:
 ## Recursos adicionales
 
 - [Documentación oficial de Playwright](https://playwright.dev/)
-"""
 
 ## Author
 
