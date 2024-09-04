@@ -33,7 +33,8 @@ test('Search and filter PlayStation 5 on MercadoLibre', async ({ page }) => {
    const dropdownButton = await page.locator(dropdownButtonSelector).first();
    await dropdownButton.click();
 
-   const mayorPrecioOption = await page.locator('//*[@id=":R2m55e6:-menu-list-option-price_desc"]/div/div/span').first();
+   // const mayorPrecioOption = await page.locator('//*[@id=":R2m55e6:-menu-list-option-price_desc"]/div/div/span').first();
+   const mayorPrecioOption = await page.locator('//*[@id=":R2m55e6:-menu-list-option-price_desc"]').first();
    await mayorPrecioOption.click();
    await page.waitForSelector('.ui-search-results');
 
@@ -44,11 +45,14 @@ test('Search and filter PlayStation 5 on MercadoLibre', async ({ page }) => {
 
       // Obtener el título y el precio
       const title = await productElement.$eval('.ui-search-item__title', (element) => element.textContent.trim());
+      const currency = await productElement.$eval('.andes-money-amount__currency-symbol', (element) => element.textContent.trim());
       const price = await productElement.$eval('.andes-money-amount__fraction', (element) => element.textContent.trim());
 
-      console.log(`Producto ${i + 1}:`);
-      console.log(`Título: ${title}`);
-      console.log(`Precio: ${price}`);
+      if (currency.includes('US')) {
+         console.log(`Elemento ${i + 1}:`, `, Título de ML: ${title}`, `, Precio: US$ ${price}`);
+      } else {
+         console.log(`Elemento ${i + 1}:`, `, Título de ML: ${title}`, `, Precio: $ ${price}`);
+       }
    }
 
 });
